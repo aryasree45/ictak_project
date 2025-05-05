@@ -14,7 +14,7 @@ public class TestBase {
 	protected Properties prop;
 	public void loadprop() throws IOException
 	{
-		FileInputStream fis=new FileInputStream("C:\\Users\\SP450\\git\\ictak_project\\ictak_project\\src\\test\\resources\\config.properties");
+		FileInputStream fis=new FileInputStream("C:\\Git\\ictak_project\\ictak_project\\src\\test\\resources\\config.properties");
 		prop=new Properties();
 		prop.load(fis);
 	}
