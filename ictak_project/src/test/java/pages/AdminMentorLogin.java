@@ -1,11 +1,16 @@
 package pages;
 
+import java.time.Duration;
+
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 
 public class AdminMentorLogin {
 	WebDriver driver;
@@ -50,7 +55,7 @@ public void blankusername() {
 	WebElement emailField = driver.findElement(By.name("email"));
 	String validationMessage = (String)((JavascriptExecutor) driver)
 	    .executeScript("return arguments[0].validationMessage;", emailField);
-	System.out.println("Validation Message: " + validationMessage);
+	System.out.println("Validation Message (blank email) : " + validationMessage);
 
 }
 public void blankpassword() {
@@ -62,7 +67,7 @@ public void blankpassword() {
 }
 public void blankemailpassword() {
 	 WebElement emailField = driver.findElement(By.name("email"));
-	 //   WebElement passwordField = driver.findElement(By.name("password"));
+	 WebElement passwordField = driver.findElement(By.name("password"));
 	    String validationMessage = (String)((JavascriptExecutor) driver)
 	            .executeScript("return arguments[0].validationMessage;", emailField);
 
@@ -84,7 +89,7 @@ public void butadd() {
 	WebElement add=driver.findElement(By.xpath("//button[text()='Add']"));
 	add.click();
 }
-public void blankDuration()   {
+public void blankDuration()  {
 	WebElement durationField = driver.findElement(By.name("duration"));
     String validationMessage = (String)((JavascriptExecutor) driver)
             .executeScript("return arguments[0].validationMessage;", durationField);
@@ -92,18 +97,75 @@ public void blankDuration()   {
     System.out.println("Validation Message (blank duration): " + validationMessage);
    
 }
-public void alertmessage()
-{
+public void blankTopic()  {
+	WebElement topic=driver.findElement(By.xpath("//input[@name='topic']"));
+    String validationMessage = (String)((JavascriptExecutor) driver)
+            .executeScript("return arguments[0].validationMessage;", topic);
+
+    System.out.println("Validation Message (blank topic): " + validationMessage);
+   
+}
+public void blankDurtopic()  {
+	WebElement topic=driver.findElement(By.xpath("//input[@name='topic']"));
+	WebElement durationField = driver.findElement(By.name("duration"));
+    String validationMessage = (String)((JavascriptExecutor) driver)
+            .executeScript("return arguments[0].validationMessage;", durationField);
+
+    System.out.println("Validation Message (blank topic and blank duration): " + validationMessage);
+   
+}
+
+public void invalidFormats(){
 	try {
-	Alert alert=driver.switchTo().alert();
-	String alerttext=alert.getText();
-	System.out.println("Alert message:"+alerttext);
-	alert.accept();
-	}catch(NoAlertPresentException e) {
-		System.out.println("no alert is present "+e.getRawMessage());
-	}catch (Exception e) {
-        System.out.println("Unhandled exception occurred: " + e.getMessage());
-	}
+        Alert alert = driver.switchTo().alert();
+        String alertText = alert.getText();
+        System.out.println("Alert Message: " + alertText);
+
+        // Check the message
+        Assert.assertEquals(alertText.trim(), "Please enter a valid topic", "Unexpected alert message.");
+        alert.accept();  // Dismiss the alert
+    } catch (NoAlertPresentException e) {
+        // Fail test if alert is not present
+        Assert.fail("Alert not displayed for invalid credentials(Invalid topic or duration/Invalid topic and duration)");
+    }
+}
+public void editmodifybutton() {
+	WebElement editbut=driver.findElement(By.xpath("//button[.//*[name()='svg' and @data-testid='EditIcon']]"));
+	editbut.click();
+}
+public void updatebutton() {
+	WebElement updbut=driver.findElement(By.xpath("//button[normalize-space()='Update']"));
+	updbut.click();
+}
+public void clearfields() {
+	
+	WebElement topicField = driver.findElement(By.xpath("//input[@name='topic']"));  
+	WebElement durationField = driver.findElement(By.xpath("//input[@name='duration']"));
+
+	// Clear existing content
+	topicField.clear();
+	durationField.clear();	
+}
+public void deletebut() {
+	
+	WebElement delete=driver.findElement(By.xpath("//button[normalize-space()='DeleteIcon']"));
+	delete.click();
+
+}
+public void okbutton() {
+	WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+	WebElement okButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[text()='OK']")));
+	okButton.click();
+
+}
+public void logout() {
+	WebElement logoutbutt=driver.findElement(By.xpath("//div[@class='MuiButtonBase-root MuiListItemButton-root MuiListItemButton-gutters MuiListItemButton-root MuiListItemButton-gutters css-16e9raa']"));
+	logoutbutt.click();
+}
+public String errorcode() {
+	WebElement err=driver.findElement(By.xpath("//span[@class='error-code']"));
+	String code=err.getText();
+	return code;
 }
 public String mentorDashboard()
 {
@@ -157,37 +219,29 @@ public void cancelbtn()
 	WebElement canbtn=driver.findElement(By.xpath("//button[@class='MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary css-1b51foz']"));
 	canbtn.click();
 }
-/*public void addreferencealert()
-{
-	try {
-	Alert alert2=driver.switchTo().alert();
-	String alerttext2=alert2.getText();
-	System.out.println("Alert message:"+alerttext2);
-	alert2.accept();
-	}catch(NoAlertPresentException e) {
-		System.out.println("no alert is present"+e.getRawMessage());
-	}catch (Exception e) {
-        System.out.println("Unhandled exception occurred: " + e.getMessage());
-	}
-}*/
-public void alertaddreference()   {
-	WebElement topic=driver.findElement(By.xpath("//input[@name='topic']"));
-	WebElement urls=driver.findElement(By.id("url"));
-    String validationMessage = (String)((JavascriptExecutor) driver)
-            .executeScript("return arguments[0].validationMessage;", topic);
 
-    System.out.println("Validation Message (blank topic and blank url): " + validationMessage);
-   
-}
 
 public void blanktopicurl()
 {
 	WebElement topic=driver.findElement(By.xpath("//input[@name='topic']"));
-	//WebElement urls=driver.findElement(By.id("url"));
+	WebElement urls=driver.findElement(By.id("url"));
 	 String validationMessage = (String)((JavascriptExecutor) driver)
 	            .executeScript("return arguments[0].validationMessage;", topic);
 
 	        System.out.println("Validation Message (blank topic and url): " + validationMessage);
+}
+public void alertmessage()
+{
+	try {
+	Alert alert1=driver.switchTo().alert();
+	String alerttext1=alert1.getText();
+	System.out.println("Alert message:"+alerttext1);
+	alert1.accept();
+	}catch(NoAlertPresentException e) {
+		System.out.println("no alert is present "+e.getRawMessage());
+	}catch (Exception e) {
+        System.out.println("Unhandled exception occurred: " + e.getMessage());
+	}
 }
 public void viewbtn()
 {
